@@ -141,32 +141,49 @@ if 'api_data' in st.session_state:
         # Ensure the DataFrame is sorted descending by period to grab the newest data first
         raw_clean_df = raw_clean_df.sort_index(ascending=False)
         
-        # Extract raw metrics from the latest year
         latest_period = raw_clean_df.index[0]
-        raw_fcf = raw_clean_df.loc[latest_period].get("Free Cash Flow", 0.0)
-        raw_shares = raw_clean_df.loc[latest_period].get("Basic Shares Outstanding", 0.0)
         
-        # Handle potential missing data
-        if pd.isna(raw_fcf): raw_fcf = 0.0
+        # Shares are always a point-in-time snapshot from the most recent period
+        raw_shares = raw_clean_df.loc[latest_period].get("Basic Shares Outstanding", 0.0)
         if pd.isna(raw_shares): raw_shares = 0.0
         
-        st.write(f"**Debug - Raw FCF ({latest_period}):**", raw_fcf)
+        # Calculate Free Cash Flow and 3-Year CAGR based on Frequency
+        cagr_default = 0.0
+        fcf_col = raw_clean_df.get("Free Cash Flow")
+        
+        if freq == "annual":
+            raw_fcf = fcf_col.iloc[0] if fcf_col is not None else 0.0
+            if pd.isna(raw_fcf): raw_fcf = 0.0
+            
+            if fcf_col is not None and len(raw_clean_df) >= 4:
+                past_fcf = fcf_col.iloc[3]
+                if pd.isna(past_fcf): past_fcf = 0.0
+                
+                if past_fcf > 0 and raw_fcf > 0:
+                    cagr = ((raw_fcf / past_fcf) ** (1/3)) - 1
+                    cagr_default = round(cagr * 100, 2)
+        else:
+            # Quarterly: Trailing Twelve Months (TTM)
+            raw_fcf = 0.0
+            if fcf_col is not None:
+                if len(raw_clean_df) >= 4:
+                    raw_fcf = fcf_col.iloc[0:4].sum(skipna=True)
+                else:
+                    raw_fcf = fcf_col.sum(skipna=True)
+                    
+                # Past TTM FCF (for CAGR): sum of 4 quarters from exactly 3 years ago
+                if len(raw_clean_df) >= 16:
+                    past_fcf = fcf_col.iloc[12:16].sum(skipna=True)
+                    if past_fcf > 0 and raw_fcf > 0:
+                        cagr = ((raw_fcf / past_fcf) ** (1/3)) - 1
+                        cagr_default = round(cagr * 100, 2)
+
+        st.write(f"**Debug - Raw FCF (TTM/Recent):**", raw_fcf)
         st.write(f"**Debug - Raw Shares ({latest_period}):**", raw_shares)
         
         # Pre-fill conversion logic
         fcf_b_default = float(raw_fcf) / 1e9 if raw_fcf else 0.0
         shares_m_default = float(raw_shares) / 1e6 if raw_shares else 0.0
-        
-        # Calculate 3-Year FCF CAGR
-        cagr_default = 0.0
-        if len(raw_clean_df) >= 4:
-            past_period = raw_clean_df.index[3] # 3 years prior
-            past_fcf = raw_clean_df.loc[past_period].get("Free Cash Flow", 0.0)
-            if pd.isna(past_fcf): past_fcf = 0.0
-            
-            if past_fcf > 0 and raw_fcf > 0:
-                cagr = ((raw_fcf / past_fcf) ** (1/3)) - 1
-                cagr_default = round(cagr * 100, 2)
                 
         with st.form('dcf_form'):
             col1, col2 = st.columns(2)
