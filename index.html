@@ -15,6 +15,13 @@
     <main class="container">
         <section class="inputs-column">
             <h2>Inputs</h2>
+            <div class="form-group">
+                <label for="ticker">Ticker Symbol</label>
+                <input type="text" id="ticker" placeholder="e.g. AAPL">
+                <button type="button" id="fetch-data-btn">Fetch Data</button>
+            </div>
+            <hr style="margin: 1.5rem 0; border: none; border-bottom: 1px solid var(--border-color);">
+            
             <form id="dcf-form">
                 <div class="form-group">
                     <label for="fcf">Current Free Cash Flow ($B)</label>

@@ -1,3 +1,58 @@
+document.getElementById('fetch-data-btn').addEventListener('click', async function() {
+    const ticker = document.getElementById('ticker').value.trim();
+    if (!ticker) {
+        alert("Please enter a ticker symbol.");
+        return;
+    }
+
+    const fetchBtn = document.getElementById('fetch-data-btn');
+    fetchBtn.textContent = "Fetching...";
+
+    try {
+        // Fetch data from the Flask API
+        const response = await fetch(`http://127.0.0.1:5000/api/financials/${ticker}`);
+        const data = await response.json();
+
+        if (data.error) {
+            alert(`Error fetching data: ${data.error}`);
+            return;
+        }
+
+        // Placeholder logic: Extract Free Cash Flow
+        // The API returns data like: { "Free Cash Flow": { "FY2023": "$100.50B", "FY2022": ... } }
+        const fcfData = data["Free Cash Flow"];
+        if (fcfData) {
+            // Sort keys to find the latest year
+            const latestYear = Object.keys(fcfData).sort().reverse()[0];
+            let latestFcf = fcfData[latestYear];
+            
+            // Remove characters like '$', 'B', 'M', or commas if the API returns formatted strings
+            if (typeof latestFcf === 'string') {
+                latestFcf = parseFloat(latestFcf.replace(/[^0-9.-]+/g, ""));
+            }
+            document.getElementById('fcf').value = latestFcf;
+        }
+
+        // Placeholder logic: Extract Shares Outstanding
+        const sharesData = data["Basic Shares Outstanding"] || data["Diluted Shares Outstanding"];
+        if (sharesData) {
+            const latestYear = Object.keys(sharesData).sort().reverse()[0];
+            let latestShares = sharesData[latestYear];
+            
+            if (typeof latestShares === 'string') {
+                latestShares = parseFloat(latestShares.replace(/[^0-9.-]+/g, ""));
+            }
+            document.getElementById('shares').value = latestShares;
+        }
+
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        alert("Failed to fetch data. Is the Flask API running at http://127.0.0.1:5000 ?");
+    } finally {
+        fetchBtn.textContent = "Fetch Data";
+    }
+});
+
 document.getElementById('dcf-form').addEventListener('submit', function(e) {
     // Prevent the default form submission (which reloads the page)
     e.preventDefault();
