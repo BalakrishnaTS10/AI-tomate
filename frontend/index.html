@@ -15,26 +15,16 @@
     <main class="container">
         <section class="inputs-column">
             <h2>Inputs</h2>
-            <div class="form-group">
-                <label for="ticker">Ticker Symbol</label>
-                <input type="text" id="ticker" placeholder="e.g. AAPL">
-            </div>
-            <div class="form-group">
-                <label for="years">Years of History</label>
-                <input type="number" id="years" value="5" min="1">
-            </div>
-            <div class="form-group">
-                <label for="freq">Frequency</label>
-                <select id="freq" style="background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 0.8rem; border-radius: 4px; font-size: 1rem; width: 100%;">
-                    <option value="annual">Annual</option>
-                    <option value="quarterly">Quarterly</option>
-                </select>
-            </div>
-            <button type="button" id="fetch-data-btn">Fetch Data</button>
-            <p id="loading-indicator" style="display: none; margin-top: 0.5rem; color: var(--accent-green); font-size: 0.9rem;">Loading data...</p>
-            <hr style="margin: 1.5rem 0; border: none; border-bottom: 1px solid var(--border-color);">
-            
             <form id="dcf-form">
+                <div class="form-group">
+                    <label for="ticker">Ticker Symbol</label>
+                    <input type="text" id="ticker" placeholder="e.g. AAPL">
+                </div>
+                <button type="button" id="fetch-data-btn">Auto-Fill from SEC</button>
+                <p id="loading-indicator" style="display: none; margin-top: 0.5rem; margin-bottom: 1rem; color: var(--accent-green); font-size: 0.9rem;">Loading data...</p>
+                
+                <hr style="margin: 1.5rem 0; border: none; border-bottom: 1px solid var(--border-color);">
+
                 <div class="form-group">
                     <label for="fcf">Current Free Cash Flow ($B)</label>
                     <input type="number" id="fcf" name="fcf" step="any" required>
@@ -52,8 +42,12 @@
                     <input type="number" id="discount-rate" name="discount-rate" step="any" required>
                 </div>
                 <div class="form-group">
-                    <label for="shares">Shares Outstanding (Billions)</label>
+                    <label for="shares">Shares Outstanding (Millions)</label>
                     <input type="number" id="shares" name="shares" step="any" required>
+                </div>
+                <div class="form-group">
+                    <label for="margin-of-safety">Margin of Safety (%)</label>
+                    <input type="number" id="margin-of-safety" name="margin-of-safety" step="any" value="20" required>
                 </div>
                 <button type="submit">Calculate Intrinsic Value</button>
             </form>
@@ -63,6 +57,7 @@
             <h2>Results</h2>
             <div class="results-display">
                 <h3 id="final-value">Intrinsic Value per Share: $0.00</h3>
+                <h3 id="target-buy-price">Target Buy Price: $0.00</h3>
                 <p id="enterprise-value">Total Enterprise Value: $0.00</p>
                 <p id="projected-cash-flow">Projected 5-Year Cash Flow: $0.00</p>
             </div>
