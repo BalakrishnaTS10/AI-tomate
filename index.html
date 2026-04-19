@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DCF Stock Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>DCF Stock Analyzer</h1>
+    </header>
+    
+    <main class="container">
+        <section class="inputs-column">
+            <h2>Inputs</h2>
+            <form id="dcf-form">
+                <div class="form-group">
+                    <label for="fcf">Current Free Cash Flow ($B)</label>
+                    <input type="number" id="fcf" name="fcf" step="any" required>
+                </div>
+                <div class="form-group">
+                    <label for="growth-rate">Growth Rate Y1-Y5 (%)</label>
+                    <input type="number" id="growth-rate" name="growth-rate" step="any" required>
+                </div>
+                <div class="form-group">
+                    <label for="terminal-rate">Terminal Growth Rate (%)</label>
+                    <input type="number" id="terminal-rate" name="terminal-rate" step="any" required>
+                </div>
+                <div class="form-group">
+                    <label for="discount-rate">Discount Rate (%)</label>
+                    <input type="number" id="discount-rate" name="discount-rate" step="any" required>
+                </div>
+                <div class="form-group">
+                    <label for="shares">Shares Outstanding (Billions)</label>
+                    <input type="number" id="shares" name="shares" step="any" required>
+                </div>
+                <button type="submit">Calculate Intrinsic Value</button>
+            </form>
+        </section>
+        
+        <section class="results-column">
+            <h2>Results</h2>
+            <div class="results-display">
+                <h3 id="final-value">Intrinsic Value per Share: $0.00</h3>
+                <p id="enterprise-value">Total Enterprise Value: $0.00</p>
+                <p id="projected-cash-flow">Projected 5-Year Cash Flow: $0.00</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; DCF Model by Balakrishna Tirucadaiyur Suresh Kumaar</p>
+    </footer>
+</body>
+</html>

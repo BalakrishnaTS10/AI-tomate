@@ -1,0 +1,147 @@
+:root {
+    --bg-dark: #121212;
+    --panel-bg: #1e1e1e;
+    --input-bg: #2d2d2d;
+    --text-main: #e0e0e0;
+    --text-muted: #a0a0a0;
+    --border-color: #333333;
+    --accent-green: #00e676;
+    --accent-green-hover: #00c853;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    line-height: 1.6;
+    padding: 0 1rem;
+}
+
+header, footer {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--text-main);
+}
+
+footer p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Layout container using CSS Grid */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr; /* Stacked layout for mobile */
+    gap: 2rem;
+}
+
+/* Responsive side-by-side layout for desktop */
+@media (min-width: 768px) {
+    .container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Panel styling */
+.inputs-column, .results-column {
+    background-color: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+}
+
+h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.4rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+    color: #ffffff;
+}
+
+/* Form Styles */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    margin-bottom: 0.4rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.form-group input {
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 0.8rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--accent-green);
+}
+
+button {
+    width: 100%;
+    background-color: var(--accent-green);
+    color: #000000;
+    font-weight: bold;
+    font-size: 1.05rem;
+    border: none;
+    padding: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s;
+    margin-top: 1rem;
+}
+
+button:hover {
+    background-color: var(--accent-green-hover);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+/* Results Styles */
+.results-display {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background-color: var(--input-bg);
+    padding: 1.75rem;
+    border-radius: 6px;
+    border-left: 4px solid var(--accent-green);
+}
+
+.results-display h3 {
+    color: var(--accent-green);
+    font-size: 1.75rem;
+    margin: 0;
+}
+
+.results-display p {
+    font-size: 1.1rem;
+    margin: 0;
+    color: var(--text-main);
+}
