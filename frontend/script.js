@@ -1,5 +1,8 @@
 document.getElementById('fetch-data-btn').addEventListener('click', async function() {
     const ticker = document.getElementById('ticker').value.trim();
+    const years = document.getElementById('years').value;
+    const freq = document.getElementById('freq').value;
+
     if (!ticker) {
         alert("Please enter a ticker symbol.");
         return;
@@ -7,11 +10,16 @@ document.getElementById('fetch-data-btn').addEventListener('click', async functi
 
     const fetchBtn = document.getElementById('fetch-data-btn');
     fetchBtn.textContent = "Fetching...";
+    const loadingIndicator = document.getElementById('loading-indicator');
+    loadingIndicator.style.display = 'block';
 
     try {
         // Fetch data from the Flask API
-        const response = await fetch(`http://127.0.0.1:5000/api/financials/${ticker}`);
+        const response = await fetch(`http://127.0.0.1:5000/api/financials/${ticker}?years=${years}&freq=${freq}`);
         const data = await response.json();
+
+        // Log data to inspect the structure in Developer Tools
+        console.log("API Response Data:", data);
 
         if (data.error) {
             alert(`Error fetching data: ${data.error}`);
@@ -50,6 +58,7 @@ document.getElementById('fetch-data-btn').addEventListener('click', async functi
         alert("Failed to fetch data. Is the Flask API running at http://127.0.0.1:5000 ?");
     } finally {
         fetchBtn.textContent = "Fetch Data";
+        loadingIndicator.style.display = 'none';
     }
 });
 

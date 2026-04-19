@@ -18,8 +18,20 @@
             <div class="form-group">
                 <label for="ticker">Ticker Symbol</label>
                 <input type="text" id="ticker" placeholder="e.g. AAPL">
-                <button type="button" id="fetch-data-btn">Fetch Data</button>
             </div>
+            <div class="form-group">
+                <label for="years">Years of History</label>
+                <input type="number" id="years" value="5" min="1">
+            </div>
+            <div class="form-group">
+                <label for="freq">Frequency</label>
+                <select id="freq" style="background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 0.8rem; border-radius: 4px; font-size: 1rem; width: 100%;">
+                    <option value="annual">Annual</option>
+                    <option value="quarterly">Quarterly</option>
+                </select>
+            </div>
+            <button type="button" id="fetch-data-btn">Fetch Data</button>
+            <p id="loading-indicator" style="display: none; margin-top: 0.5rem; color: var(--accent-green); font-size: 0.9rem;">Loading data...</p>
             <hr style="margin: 1.5rem 0; border: none; border-bottom: 1px solid var(--border-color);">
             
             <form id="dcf-form">

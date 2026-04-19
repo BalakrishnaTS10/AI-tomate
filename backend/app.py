@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from SEC_Financials_Final import get_financial_data
 
@@ -9,8 +9,12 @@ CORS(app)
 @app.route('/api/financials/<ticker>', methods=['GET'])
 def get_financials(ticker):
     try:
-        # Call your SEC scraping function, defaulting to 5 years
-        data = get_financial_data(ticker, 5)
+        # Get query parameters with default fallbacks and type conversion
+        years = request.args.get('years', default=5, type=int)
+        freq = request.args.get('freq', default='annual', type=str)
+        
+        # Call your SEC scraping function
+        data = get_financial_data(ticker, years, freq)
         return jsonify(data)
     except Exception as e:
         return jsonify({"error": str(e)}), 500

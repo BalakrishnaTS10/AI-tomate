@@ -1125,9 +1125,9 @@ def print_table(df: pd.DataFrame, title: str, ticker: str, company_name: str,
 # API Backend Function
 # ─────────────────────────────────────────────
 
-def get_financial_data(ticker: str, years: int) -> dict:
+def get_financial_data(ticker: str, years: int, freq: str = "annual") -> dict:
     """
-    Fetch and return annual financial data for a given ticker as a dictionary.
+    Fetch and return financial data for a given ticker as a dictionary.
     Designed for API backend usage.
     """
     try:
@@ -1137,11 +1137,11 @@ def get_financial_data(ticker: str, years: int) -> dict:
         return {"error": str(e)}
 
     cutoff = date(date.today().year - years, 1, 1)
-    df_annual = build_dataframe(facts, "annual", cutoff)
+    df = build_dataframe(facts, freq, cutoff)
 
-    if df_annual.empty:
+    if df.empty:
         return {"error": f"No data available for {ticker} over the last {years} years."}
 
     # Convert the pandas DataFrame into a clean JSON-ready dictionary
     # Output format: {"Revenue": {"FY2023": "$383.29B", "FY2022": ...}, ...}
-    return df_annual.to_dict(orient="index")
+    return df.to_dict(orient="index")
